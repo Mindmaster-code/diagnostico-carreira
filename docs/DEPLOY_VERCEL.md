@@ -4,7 +4,13 @@ Sim: dá para ter banco na Vercel usando **Neon** (Postgres serverless) pelo pai
 
 ## 1. Criar a tabela
 
-No console SQL do Neon, rode o arquivo `scripts/neon-schema.sql` (cria a tabela `diagnostics`).
+**Opção A (recomendado, na sua máquina):** na raiz do projeto, crie `.env.local` com `DATABASE_URL=` (a mesma string da Vercel) e rode:
+
+```bash
+npm run db:schema
+```
+
+**Opção B:** no SQL Editor do Neon, rode o arquivo `scripts/neon-schema.sql`.
 
 ## 2. Variáveis de ambiente no projeto Vercel
 
