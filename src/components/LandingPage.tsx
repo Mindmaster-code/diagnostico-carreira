@@ -20,7 +20,8 @@ export function LandingPage({ answers, onChange, onStart }: LandingPageProps) {
       <p className="mm-landing__eyebrow">Veredito Profissional</p>
       <h1 className="mm-landing__title">Descubra em minutos o que o mercado enxerga na sua carreira hoje</h1>
       <p className="mm-landing__lead">
-        Um diagnóstico direto, sem enrolação. Informe seu e-mail para começar e receber o resultado alinhado ao seu contato.
+        Um diagnóstico direto, sem enrolação. Use um e-mail válido e que você acessa com frequência. É para esse endereço que
+        enviamos o texto completo do seu veredito ao final.
       </p>
 
       <form
@@ -46,7 +47,11 @@ export function LandingPage({ answers, onChange, onStart }: LandingPageProps) {
             onChange={(e) => onChange({ email: e.target.value })}
             required
             aria-invalid={answers.email.length > 0 && !valid}
+            aria-describedby="landing-email-hint"
           />
+          <p id="landing-email-hint" className="mm-landing__hint">
+            Sem e-mail válido, você não recebe a cópia do resultado por mensagem. Confira se digitou certo antes de iniciar.
+          </p>
         </div>
         <div className="mm-actions mm-landing__actions">
           <button type="submit" className="mm-btn mm-btn-primary mm-landing__cta" disabled={!valid}>

@@ -1,4 +1,12 @@
-# React + TypeScript + Vite
+# Veredito Profissional (MindMaster)
+
+Diagnóstico de carreira em React + Vite. Ao concluir, o texto do veredito pode ser enviado por e-mail e salvo via API na Vercel.
+
+**Deploy com banco (Neon) e e-mail (Resend):** veja [docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md).
+
+---
+
+## React + TypeScript + Vite (template)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

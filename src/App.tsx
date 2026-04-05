@@ -1,4 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { computeGapScore } from './lib/verdict';
+import { serializeVerdictEmail } from './lib/serializeVerdictEmail';
+import { submitDiagnostic } from './lib/submitDiagnostic';
 import { buildVerdictScreen } from './lib/verdictScreen';
 import { LoadingVerdict } from './components/LoadingVerdict';
 import { ProgressBar } from './components/ProgressBar';
@@ -26,6 +29,38 @@ function App() {
   const handleLoadingDone = useCallback(() => {
     setPhase('verdict');
   }, []);
+
+  useEffect(() => {
+    if (phase !== 'verdict') return;
+    const email = answers.email.trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+
+    const storageKey = `mm-verdict-mail:${email}`;
+    if (typeof sessionStorage === 'undefined') return;
+    if (sessionStorage.getItem(storageKey) === 'ok') return;
+    if (sessionStorage.getItem(storageKey) === 'sending') return;
+    sessionStorage.setItem(storageKey, 'sending');
+
+    const verdictPlain = serializeVerdictEmail(verdictScreen);
+    const score = computeGapScore(answers);
+
+    let finished = false;
+    void submitDiagnostic({ email, answers, verdictPlain, score })
+      .then(() => {
+        finished = true;
+        sessionStorage.setItem(storageKey, 'ok');
+      })
+      .catch((err) => {
+        sessionStorage.removeItem(storageKey);
+        console.warn('Envio do veredito (e-mail / servidor) falhou:', err);
+      });
+
+    return () => {
+      if (!finished && sessionStorage.getItem(storageKey) === 'sending') {
+        sessionStorage.removeItem(storageKey);
+      }
+    };
+  }, [phase, answers, verdictScreen]);
 
   return (
     <div className="mm-app">
